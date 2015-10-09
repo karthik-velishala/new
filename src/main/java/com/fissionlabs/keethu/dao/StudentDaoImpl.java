@@ -38,7 +38,8 @@ public class StudentDaoImpl implements StudentDao {
 @Override
 	public boolean search(String name,String password)
 	{
-		Session session = this.sessionFactory.getCurrentSession();
+		Session session = this.sessionFactory.openSession();
+		
 		Transaction transaction=session.beginTransaction();
 		Query query=(Query) session.createQuery("from Student where name=:n1 and password=:p1");
 		 query.setParameter("n1",name );

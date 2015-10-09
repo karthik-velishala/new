@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.fissionlabs.keethu.dao.StudentDao;
 import com.fissionlabs.keethu.dao.StudentDaoImpl;
 import com.fissionlabs.keethu.model.Student;
+import com.fissionlabs.keethu.HomeController;
 
 /**
  * Handles requests for the application home page.
@@ -21,6 +22,7 @@ public class HomeController {
 	
 	@Autowired
 	private StudentDao studentDao;
+	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
 	
 	
@@ -33,18 +35,20 @@ public class HomeController {
 
 
 	@RequestMapping(value = "/student", method = RequestMethod.POST)
-	public String home(@RequestParam("name")String name,@RequestParam("password")String password) {
+	public String save(@RequestParam("name")String name,@RequestParam("password")String password) {
 		Student stu=new Student();
 		stu.setName(name);
 		stu.setPassword(password);
 		
 		studentDao.save(stu);
+		logger.info("successfully saved");
 		
 		return "registersuccess";
 	}
 	@RequestMapping(value="/student",method=RequestMethod.GET)
 	public String login(@RequestParam("name")String name,@RequestParam("password")String password)
 	{
+		logger.info("successfully logged in");
 		if(studentDao.search(name, password))
 			return "loginsuccess";
 		else 
@@ -55,6 +59,7 @@ public class HomeController {
 	public String edit(@RequestParam("password")String password,@RequestParam("name")String name)
 	{
 		studentDao.update(password,name);
+		logger.info("successfully edited details");
 		return "editsuccess";
 		
 		
@@ -62,6 +67,7 @@ public class HomeController {
 	@RequestMapping(value="/student2",method=RequestMethod.GET)
 	public String delete(@RequestParam("password")String password,@RequestParam("name")String name)
 	{
+		logger.info("successfully deleted");
 		studentDao.delete(password,name);
 		return "deletesuccess"
 				+ "";
